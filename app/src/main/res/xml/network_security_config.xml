@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Un NAS local répond très souvent en HTTP simple (WebDAV) ou en SMB, sans
+    certificat TLS. On autorise donc le trafic en clair globalement, ce qui
+    reste raisonnable puisque ce trafic ne sort jamais du réseau local.
+    À restreindre à un domaine précis si besoin (ex: cleartextTrafficPermitted
+    uniquement pour l'IP/nom du NAS).
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
