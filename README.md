@@ -1,8 +1,10 @@
 # SyncZen
 
-Application Android de sauvegarde locale automatique (Wi-Fi / NAS), basée sur
-le cahier des charges fourni. Kotlin 100%, Jetpack Compose, MVVM, WorkManager,
+Application Android de sauvegarde locale automatique (Wi-Fi / NAS). Kotlin 100%, Jetpack Compose, MVVM, WorkManager,
 Room, OkHttp (WebDAV) + JCIFS-NG (SMB). Licence GPL v3 (voir `LICENSE`).
+
+[![Version](https://img.shields.io/badge/version-0.3.0-blue.svg)](CHANGELOG.md)
+[![Licence](https://img.shields.io/badge/licence-GPL_v3-green.svg)](LICENSE)
 
 ## Pour démarrer
 1. Ouvrir le dossier dans Android Studio (Import project). Le wrapper Gradle
@@ -36,27 +38,24 @@ Room, OkHttp (WebDAV) + JCIFS-NG (SMB). Licence GPL v3 (voir `LICENSE`).
   tests.
 
 ## Points encore ouverts / à finir
-- **Mot de passe stocké en clair dans Room** — à chiffrer avant toute
-  diffusion publique (EncryptedSharedPreferences ou SQLCipher). C'est le
-  point le plus important à traiter avant un release F-Droid.
-- **Filtrage par SSID précis** (`wifiSsid` dans `NasConfig`) : le champ existe
-  et est stocké, mais `SyncWorker` ne le vérifie pas encore. Le faire
-  proprement demande `ACCESS_FINE_LOCATION` sur Android 8+ pour lire le SSID
-  exact — permission assez intrusive pour ce que ça apporte ; à toi de voir
-  si tu veux ce compromis ou rester sur "Wi-Fi non facturé" (contrainte
-  `NetworkType.UNMETERED` déjà en place, suffisant dans la plupart des cas
-  domestiques).
 - **Upload WebDAV en mémoire** : le fichier est chargé entièrement en RAM
   avant le PUT (OkHttp ne fait pas de streaming direct depuis un
-  `InputStream` sans écrire une `RequestBody` custom) — à revoir si tu
-  comptes sauvegarder de grosses vidéos.
+  `InputStream` sans écrire une `RequestBody` custom) — **Résolu** : implémentation de `StreamingFileBody` pour le streaming.
 - **Gestion des conflits / renommage** : si un fichier du même nom existe déjà
-  côté NAS, le SMB/WebDAV écrasera ou échouera selon le serveur — aucune
-  logique de vérification ajoutée pour l'instant.
+  côté NAS, le SMB/WebDAV écrasera ou échouera selon le serveur — **Résolu** : ajout de stratégies de résolution configurables (SKIP, OVERWRITE, RENAME).
 - **Notification de progression** : `SyncWorker` n'affiche pas de
-  notification foreground pendant la synchro (permission `POST_NOTIFICATIONS`
-  demandée dans le manifeste mais pas encore utilisée) — utile si tu veux
-  rendre visible une synchro longue.
+  notification foreground pendant la synchro — **Résolu** : notifications foreground avec progression implémentées.
+- **Filtrage par SSID précis** (`wifiSsid` dans `NasConfig`) : le champ existe
+  et est stocké, mais `SyncWorker` ne le vérifie pas encore — **Résolu** : filtrage par SSID implémenté avec vérification du réseau actuel.
+- **Mot de passe stocké en clair dans Room** — **Résolu** : chiffrement AES-256-GCM avec Android Keystore implémenté.
+
+## Nouvelles fonctionnalités
+- ✅ **Chiffrement des credentials** : AES-256-GCM avec Android Keystore
+- ✅ **Notifications foreground** : avec progression pendant la synchronisation
+- ✅ **Filtrage par SSID** : synchronisation uniquement sur un réseau Wi-Fi spécifique
+- ✅ **Gestion des conflits** : stratégies configurables (Sauter, Écraser, Renommer)
+- ✅ **Minification activée** : ProGuard/R8 pour les builds de production
+- ✅ **Streaming des fichiers** : pas de chargement complet en mémoire pour WebDAV
 
 ## Structure
 ```

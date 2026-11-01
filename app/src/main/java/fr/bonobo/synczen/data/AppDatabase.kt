@@ -17,17 +17,23 @@ class Converters {
     fun fromSyncStatus(value: SyncStatus): String = value.name
     @TypeConverter
     fun toSyncStatus(value: String): SyncStatus = SyncStatus.valueOf(value)
+
+    @TypeConverter
+    fun fromConflictResolutionStrategy(value: ConflictResolutionStrategy): String = value.name
+    @TypeConverter
+    fun toConflictResolutionStrategy(value: String): ConflictResolutionStrategy = ConflictResolutionStrategy.valueOf(value)
 }
 
 @Database(
-    entities = [NasConfig::class, SyncLogEntry::class],
-    version = 1,
-    exportSchema = false
+    entities = [StoredNasConfig::class, SyncLogEntry::class, SyncFileRecord::class],
+    version = 4,
+    exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun nasConfigDao(): NasConfigDao
     abstract fun syncLogDao(): SyncLogDao
+    abstract fun syncFileDao(): SyncFileDao
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
@@ -38,7 +44,13 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "synczen.db"
-                ).build().also { INSTANCE = it }
+                ).addMigrations(
+                    CredentialMigration(AndroidKeystoreCredentials.cipher),
+                    SyncFileMigration(),
+                    ConflictResolutionMigration()
+                )
+                    .addCallback(CredentialStorageCleanup())
+                    .build().also { INSTANCE = it }
             }
     }
 }

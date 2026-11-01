@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">SyncZen</string>
+    
+    <!-- Notifications -->
+    <string name="notification_channel_sync_name">Synchronisation</string>
+    <string name="notification_channel_sync_description">Notifications de synchronisation en cours</string>
+    <string name="notification_sync_in_progress">Synchronisation en cours...</string>
+    <string name="notification_sync_complete">Synchronisation terminée</string>
+    <string name="notification_sync_failed">Synchronisation échouée</string>
+    
+    <!-- Conflict resolution -->
+    <string name="conflict_title">Conflit de fichier</string>
+    <string name="conflict_message">Le fichier %1$s existe déjà. Que souhaitez-vous faire ?</string>
+    <string name="conflict_override">Écraser</string>
+    <string name="conflict_rename">Renommer</string>
+    <string name="conflict_skip">Sauter</string>
+    <string name="conflict_skip_all">Tout sauter</string>
+    
+    <!-- Errors -->
+    <string name="error_wifi_not_connected">Pas connecté au Wi-Fi requis</string>
+    <string name="error_ssid_not_matching">SSID ne correspond pas à la configuration</string>
+    <string name="error_storage_full">Espace de stockage insuffisant</string>
+    <string name="error_network_unavailable">Réseau indisponible</string>
 </resources>
