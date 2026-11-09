@@ -1,0 +1,8 @@
+
+fr.bonobo.synczen.data.AndroidSafWorkManagerTest:....
+
+Time: 0.977
+
+OK (4 tests)
+
+

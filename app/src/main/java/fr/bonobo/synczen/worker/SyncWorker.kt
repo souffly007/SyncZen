@@ -113,7 +113,7 @@ class SyncWorker(private val appContext: Context, params: WorkerParameters) : Co
     /**
      * Met à jour la notification foreground.
      */
-    private fun updateForegroundNotification(context: Context, message: String) {
+    private suspend fun updateForegroundNotification(context: Context, message: String) {
         notification = SyncZenNotificationManager.createSyncForegroundNotification(
             context,
             message,

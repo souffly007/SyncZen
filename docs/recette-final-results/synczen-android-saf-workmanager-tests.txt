@@ -1,0 +1,41 @@
+
+fr.bonobo.synczen.data.AndroidSafWorkManagerTest:
+Error in actualSyncWorkerPublishesSyntheticSafFileToSmbAndNextPassUsesRoomJournal(fr.bonobo.synczen.data.AndroidSafWorkManagerTest):
+java.lang.AssertionError: Unexpected work state FAILED
+	at org.junit.Assert.fail(Assert.java:89)
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest.awaitState(AndroidSafWorkManagerTest.kt:34)
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest.access$awaitState(AndroidSafWorkManagerTest.kt:15)
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest$actualSyncWorkerPublishesSyntheticSafFileToSmbAndNextPassUsesRoomJournal$1.invokeSuspend(AndroidSafWorkManagerTest.kt:64)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:277)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest.actualSyncWorkerPublishesSyntheticSafFileToSmbAndNextPassUsesRoomJournal(AndroidSafWorkManagerTest.kt:52)
+...
+
+Time: 1.09
+There was 1 failure:
+1) actualSyncWorkerPublishesSyntheticSafFileToSmbAndNextPassUsesRoomJournal(fr.bonobo.synczen.data.AndroidSafWorkManagerTest)
+java.lang.AssertionError: Unexpected work state FAILED
+	at org.junit.Assert.fail(Assert.java:89)
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest.awaitState(AndroidSafWorkManagerTest.kt:34)
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest.access$awaitState(AndroidSafWorkManagerTest.kt:15)
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest$actualSyncWorkerPublishesSyntheticSafFileToSmbAndNextPassUsesRoomJournal$1.invokeSuspend(AndroidSafWorkManagerTest.kt:64)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:277)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest.actualSyncWorkerPublishesSyntheticSafFileToSmbAndNextPassUsesRoomJournal(AndroidSafWorkManagerTest.kt:52)
+
+FAILURES!!!
+Tests run: 4,  Failures: 1
+
+

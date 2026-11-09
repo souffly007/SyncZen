@@ -1,0 +1,12 @@
+
+fr.bonobo.synczen.data.AndroidUpgradeTest:.
+fr.bonobo.synczen.data.AndroidKeystoreCredentialsTest:..
+fr.bonobo.synczen.data.AndroidCredentialMigrationTest:.......
+fr.bonobo.synczen.data.AndroidNetworkSecurityTest:.
+fr.bonobo.synczen.data.AndroidWebDavSafePublicationTest:......
+
+Time: 5.363
+
+OK (17 tests)
+
+

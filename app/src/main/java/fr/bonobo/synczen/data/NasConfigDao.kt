@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NasConfigDao {
     @Query("SELECT * FROM nas_config WHERE id = 1")
-    fun observeConfig(): Flow<NasConfig?>
+    fun observeConfig(): Flow<StoredNasConfig?>
 
     @Query("SELECT * FROM nas_config WHERE id = 1")
-    suspend fun getConfig(): NasConfig?
+    suspend fun getConfig(): StoredNasConfig?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(config: NasConfig)
+    suspend fun upsert(config: StoredNasConfig)
 
     @Query("UPDATE nas_config SET lastSyncTimestamp = :timestamp WHERE id = 1")
     suspend fun updateLastSync(timestamp: Long)

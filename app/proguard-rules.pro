@@ -5,6 +5,7 @@
 # Conserver les classes JCIFS-NG
 -keep class jcifs.** { *; }
 -dontwarn jcifs.**
+-dontwarn org.slf4j.impl.StaticLoggerBinder
 
 # Conserver les classes Compose
 -keep class androidx.compose.** { *; }

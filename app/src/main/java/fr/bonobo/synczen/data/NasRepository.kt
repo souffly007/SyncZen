@@ -9,17 +9,17 @@ import jcifs.smb.SmbFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Credentials
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.InputStream
 import java.util.Properties
+import javax.net.ssl.SSLHandshakeException
+import javax.net.ssl.SSLPeerUnverifiedException
 
 sealed class NasResult {
     data class Success(val message: String) : NasResult()
     data class Failure(val message: String) : NasResult()
+    data class Skipped(val message: String) : NasResult()
 }
 
 /**
@@ -33,12 +33,13 @@ sealed class NasResult {
  * suffit sur émulateur mais échoue en pratique sur un vrai téléphone avec
  * données mobiles activées.
  */
-class NasRepository(
+class NasRepository internal constructor(
     private val config: NasConfig,
-    private val appContext: Context? = null
+    private val appContext: Context? = null,
+    private val webDavClientFactory: () -> OkHttpClient = { OkHttpClient() }
 ) {
 
-    private val httpClient by lazy { OkHttpClient() }
+    private val httpClient by lazy { WebDavSecurity.client(webDavClientFactory()) }
 
     private fun smbContext(): CIFSContext {
         val props = Properties().apply {
@@ -69,14 +70,17 @@ class NasRepository(
                     }
                 }
                 ServerType.WEBDAV -> {
+                    val url = WebDavSecurity.requireHttpsUrl(ensureTrailingSlash(config.address))
                     val request = Request.Builder()
-                        .url(ensureTrailingSlash(config.address))
+                        .url(url)
                         .method("PROPFIND", null)
                         .header("Depth", "0")
                         .header("Authorization", basicAuthHeader())
                         .build()
                     httpClient.newCall(request).execute().use { response ->
-                        if (response.isSuccessful || response.code == 207) {
+                        if (response.code in 300..399) {
+                            NasResult.Failure(WebDavSecurity.redirectMessage(response.code))
+                        } else if (response.isSuccessful || response.code == 207) {
                             NasResult.Success("Connexion WebDAV réussie")
                         } else {
                             NasResult.Failure("Erreur WebDAV : HTTP ${response.code}")
@@ -89,45 +93,25 @@ class NasRepository(
         }
     }
 
-    /**
-     * Envoie le contenu d'un flux (typiquement ouvert depuis une URI SAF via
-     * ContentResolver) vers la racine du dossier distant configuré, sous le nom
-     * [fileName]. Le flux est entièrement chargé en mémoire pour le PUT WebDAV
-     * (OkHttp ne propose pas de RequestBody streaming simple sans dépendance
-     * supplémentaire) : à surveiller pour de très gros fichiers.
-     */
+    /** Legacy flat uploads are intentionally unavailable: a safe path and persistent journal are required. */
+    @Suppress("UNUSED_PARAMETER")
     suspend fun uploadFile(fileName: String, input: InputStream): NasResult = withContext(Dispatchers.IO) {
-        ensureWifiBinding()
         try {
-            when (config.serverType) {
-                ServerType.SMB -> {
-                    val remotePath = normalizeSmbAddress(config.address) + fileName
-                    val smbFile = SmbFile(remotePath, smbContext())
-                    smbFile.outputStream.use { out -> input.copyTo(out) }
-                    NasResult.Success("Fichier envoyé : $fileName")
-                }
-                ServerType.WEBDAV -> {
-                    val url = ensureTrailingSlash(config.address) + fileName
-                    val bytes = input.readBytes()
-                    val body: RequestBody = bytes.toRequestBody("application/octet-stream".toMediaTypeOrNull())
-                    val request = Request.Builder()
-                        .url(url)
-                        .put(body)
-                        .header("Authorization", basicAuthHeader())
-                        .build()
-                    httpClient.newCall(request).execute().use { response ->
-                        if (response.isSuccessful) {
-                            NasResult.Success("Fichier envoyé : $fileName")
-                        } else {
-                            NasResult.Failure("Échec envoi $fileName : HTTP ${response.code}")
-                        }
-                    }
-                }
-            }
+            if (config.serverType == ServerType.WEBDAV) WebDavSecurity.requireHttpsUrl(config.address)
+            NasResult.Failure("Publication refusée : utilisez un chemin source sécurisé et le suivi local ; ancien envoi à plat désactivé.")
         } catch (e: Exception) {
-            NasResult.Failure("Échec envoi $fileName : ${describeError(e)}")
-        } finally {
-            input.close()
+            NasResult.Failure(describeError(e))
+        } finally { input.close() }
+    }
+
+    internal fun safeTransport(): SafeRemoteTransport {
+        ensureWifiBinding()
+        return when (config.serverType) {
+            ServerType.SMB -> SmbSafeTransport(normalizeSmbAddress(config.address), smbContext())
+            ServerType.WEBDAV -> {
+                WebDavSecurity.requireHttpsUrl(config.address)
+                WebDavSafeTransport(config.address, httpClient, basicAuthHeader())
+            }
         }
     }
 
@@ -145,6 +129,11 @@ class NasRepository(
 
     /** Ajoute un indice utile dans les cas d'erreur réseau les plus fréquents. */
     private fun describeError(e: Exception): String {
+        if (e is WebDavSecurityException) return e.message.orEmpty()
+        if (config.serverType == ServerType.WEBDAV &&
+            (e is SSLHandshakeException || e is SSLPeerUnverifiedException)) {
+            return "Connexion WebDAV TLS refusée : vérifiez le certificat du serveur et son nom d'hôte. Aucun contournement de validation TLS."
+        }
         val raw = e.message ?: e.javaClass.simpleName
         return when {
             appContext == null ->

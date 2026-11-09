@@ -1,0 +1,71 @@
+
+fr.bonobo.synczen.data.AndroidWebDavSecurityTest:........
+fr.bonobo.synczen.data.AndroidWebDavStreamingTest:......
+fr.bonobo.synczen.data.AndroidSafWorkManagerTest:
+Error in actualSyncWorkerPublishesSyntheticSafFileToSmbAndNextPassUsesRoomJournal(fr.bonobo.synczen.data.AndroidSafWorkManagerTest):
+java.util.NoSuchElementException: Collection contains no element matching the predicate.
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest$actualSyncWorkerPublishesSyntheticSafFileToSmbAndNextPassUsesRoomJournal$1.invokeSuspend(AndroidSafWorkManagerTest.kt:102)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:277)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest.actualSyncWorkerPublishesSyntheticSafFileToSmbAndNextPassUsesRoomJournal(AndroidSafWorkManagerTest.kt:52)
+
+Error in selectedSyntheticSafTreeAndPersistedReadPermissionSurviveProcessRestart(fr.bonobo.synczen.data.AndroidSafWorkManagerTest):
+java.util.NoSuchElementException: Collection contains no element matching the predicate.
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest$selectedSyntheticSafTreeAndPersistedReadPermissionSurviveProcessRestart$1.invokeSuspend(AndroidSafWorkManagerTest.kt:102)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:277)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest.selectedSyntheticSafTreeAndPersistedReadPermissionSurviveProcessRestart(AndroidSafWorkManagerTest.kt:19)
+.
+Error in queuedWorkCanBeCancelledAndNewPassCanBeScheduledWithoutReusingCancelledWork(fr.bonobo.synczen.data.AndroidSafWorkManagerTest):
+java.lang.NullPointerException
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest.queuedWorkCanBeCancelledAndNewPassCanBeScheduledWithoutReusingCancelledWork(AndroidSafWorkManagerTest.kt:89)
+
+fr.bonobo.synczen.data.AndroidSmbPublicationTest:.
+fr.bonobo.synczen.data.AndroidNetworkSecurityTest:..
+
+Time: 14.929
+There were 3 failures:
+1) actualSyncWorkerPublishesSyntheticSafFileToSmbAndNextPassUsesRoomJournal(fr.bonobo.synczen.data.AndroidSafWorkManagerTest)
+java.util.NoSuchElementException: Collection contains no element matching the predicate.
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest$actualSyncWorkerPublishesSyntheticSafFileToSmbAndNextPassUsesRoomJournal$1.invokeSuspend(AndroidSafWorkManagerTest.kt:102)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:277)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest.actualSyncWorkerPublishesSyntheticSafFileToSmbAndNextPassUsesRoomJournal(AndroidSafWorkManagerTest.kt:52)
+2) selectedSyntheticSafTreeAndPersistedReadPermissionSurviveProcessRestart(fr.bonobo.synczen.data.AndroidSafWorkManagerTest)
+java.util.NoSuchElementException: Collection contains no element matching the predicate.
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest$selectedSyntheticSafTreeAndPersistedReadPermissionSurviveProcessRestart$1.invokeSuspend(AndroidSafWorkManagerTest.kt:102)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:277)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest.selectedSyntheticSafTreeAndPersistedReadPermissionSurviveProcessRestart(AndroidSafWorkManagerTest.kt:19)
+3) queuedWorkCanBeCancelledAndNewPassCanBeScheduledWithoutReusingCancelledWork(fr.bonobo.synczen.data.AndroidSafWorkManagerTest)
+java.lang.NullPointerException
+	at fr.bonobo.synczen.data.AndroidSafWorkManagerTest.queuedWorkCanBeCancelledAndNewPassCanBeScheduledWithoutReusingCancelledWork(AndroidSafWorkManagerTest.kt:89)
+
+FAILURES!!!
+Tests run: 21,  Failures: 3
+
+

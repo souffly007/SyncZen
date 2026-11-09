@@ -1,0 +1,8 @@
+
+fr.bonobo.synczen.data.AndroidActiveCancellationTest:.
+
+Time: 21.368
+
+OK (1 test)
+
+

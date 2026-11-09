@@ -39,7 +39,9 @@ fun SyncScreen(viewModel: SyncViewModel, themeMode: SyncThemeMode, onThemeChange
     var address by remember { mutableStateOf(savedConfig?.address ?: "") }
     var username by remember { mutableStateOf(savedConfig?.username ?: "") }
     var password by remember { mutableStateOf(savedConfig?.password ?: "") }
+    var wifiSsid by remember { mutableStateOf(savedConfig?.wifiSsid ?: "") }
     var requireCharging by remember { mutableStateOf(savedConfig?.requireCharging ?: false) }
+    var conflictStrategy by remember { mutableStateOf(savedConfig?.conflictResolutionStrategy ?: ConflictResolutionStrategy.SKIP) }
     var hasEditedFields by remember { mutableStateOf(false) }
 
     // Room peut répondre après le premier affichage Compose : on remet alors
@@ -51,7 +53,9 @@ fun SyncScreen(viewModel: SyncViewModel, themeMode: SyncThemeMode, onThemeChange
             address = config.address
             username = config.username
             password = config.password
+            wifiSsid = config.wifiSsid ?: ""
             requireCharging = config.requireCharging
+            conflictStrategy = config.conflictResolutionStrategy
         }
     }
 
@@ -61,7 +65,7 @@ fun SyncScreen(viewModel: SyncViewModel, themeMode: SyncThemeMode, onThemeChange
             viewModel.addSourceFolder(uri.toString())
         }
     }
-    fun currentConfig() = NasConfig(serverType = serverType, address = address, username = username, password = password, sourceFolderUris = savedConfig?.sourceFolderUris ?: "", requireCharging = requireCharging, lastSyncTimestamp = savedConfig?.lastSyncTimestamp ?: 0L)
+    fun currentConfig() = NasConfig(serverType = serverType, address = address, username = username, password = password, sourceFolderUris = savedConfig?.sourceFolderUris ?: "", wifiSsid = if (wifiSsid.isBlank()) null else wifiSsid, requireCharging = requireCharging, conflictResolutionStrategy = conflictStrategy, lastSyncTimestamp = savedConfig?.lastSyncTimestamp ?: 0L)
 
     Scaffold(topBar = {
         TopAppBar(title = {
@@ -104,6 +108,32 @@ fun SyncScreen(viewModel: SyncViewModel, themeMode: SyncThemeMode, onThemeChange
                             DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) { ServerType.values().forEach { type -> DropdownMenuItem(text = { Text(type.name) }, onClick = { serverType = type; expanded = false }) } }
                         }
                         OutlinedTextField(value = address, onValueChange = { address = it; hasEditedFields = true }, label = { Text("Adresse du serveur") }, placeholder = { Text("smb://mon-nas/partage") }, modifier = Modifier.fillMaxWidth())
+                        OutlinedTextField(value = wifiSsid, onValueChange = { wifiSsid = it; hasEditedFields = true }, label = { Text("SSID Wi-Fi requis (optionnel)") }, placeholder = { Text("MonWiFi") }, modifier = Modifier.fillMaxWidth())
+                        
+                        // Stratégie de résolution des conflits
+                        var conflictExpanded by remember { mutableStateOf(false) }
+                        ExposedDropdownMenuBox(expanded = conflictExpanded, onExpandedChange = { conflictExpanded = !conflictExpanded }) {
+                            OutlinedTextField(
+                                value = conflictStrategy.name,
+                                onValueChange = {},
+                                readOnly = true,
+                                label = { Text("Stratégie de conflit") },
+                                modifier = Modifier.fillMaxWidth().menuAnchor()
+                            )
+                            DropdownMenu(expanded = conflictExpanded, onDismissRequest = { conflictExpanded = false }) {
+                                ConflictResolutionStrategy.values().forEach { strategy ->
+                                    DropdownMenuItem(
+                                        text = { Text(strategy.name) },
+                                        onClick = { 
+                                            conflictStrategy = strategy
+                                            conflictExpanded = false
+                                            hasEditedFields = true
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                        
                         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             OutlinedTextField(value = username, onValueChange = { username = it; hasEditedFields = true }, label = { Text("Utilisateur") }, modifier = Modifier.weight(1f))
                             OutlinedTextField(value = password, onValueChange = { password = it; hasEditedFields = true }, label = { Text("Mot de passe") }, modifier = Modifier.weight(1f))

@@ -1,0 +1,8 @@
+
+fr.bonobo.synczen.data.AndroidMigrationCrashRecoveryTest:.
+
+Time: 0.075
+
+OK (1 test)
+
+

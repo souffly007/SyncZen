@@ -1,0 +1,4 @@
+
+fr.bonobo.synczen.data.AndroidMigrationCrashFixture:SYNCZEN_READY_TO_KILL_SYNTHETIC_MIGRATION
+INSTRUMENTATION_RESULT: shortMsg=Process crashed.
+INSTRUMENTATION_CODE: 0

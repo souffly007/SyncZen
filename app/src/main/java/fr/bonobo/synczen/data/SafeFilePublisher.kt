@@ -212,7 +212,7 @@ internal class SafeFilePublisher(
             // Créer un nouveau chemin avec un timestamp
             val timestamp = System.currentTimeMillis()
             val newName = "${path.segments.last()}_$timestamp"
-            val newPath = RemotePath.checked(path.segments.dropLast(1) + newName, true)
+            val newPath = path.sibling(newName)
             
             remote.verifyPublicationSupport()
             remote.ensureParents(newPath)
